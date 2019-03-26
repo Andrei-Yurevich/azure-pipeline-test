@@ -1,0 +1,23 @@
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Install ReportGenerator Global Tool
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install dotnet-reportgenerator-globaltool --tool-path .
+     
+- script: |
+    mkdir reports
+    ./reportgenerator "-reports:/tmp/cobertura.xml" "-targetdir:./reports" "-reporttypes:HTMLInline;HTMLChart"
+  displayName: Generate HTML Report
+
+
+- task: UniversalPackages@0 
+  displayName: Publish reports 
+  inputs:
+    command: publish
+    publishDirectory: './reports'
+    vstsFeedPublish: 'reports'
+    vstsFeedPackagePublish: 'code_coverage_reports'
+    packagePublishDescription: reports generated for $(version) artifact version
+    versionPublish: $(version)

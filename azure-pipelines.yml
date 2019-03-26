@@ -1,0 +1,14 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables:
+  BuildConfiguration: Release
+  version: 0.0.1
+  path_to_test_csproj: ./ViewComponentsDemo.Tests/ViewComponentsDemo.Tests.csproj 
+
+steps:
+- template: build_and_test.yml
+- template: generate_report.yml
